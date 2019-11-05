@@ -5,6 +5,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:barcode_scan/barcode_scan.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -30,8 +32,42 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
-  String barcode = '';
-  Uint8List bytes = Uint8List(200);
+
+String result = "0.0";
+
+  Future _scanQR() async {
+    try {
+      String qrResult = await BarcodeScanner.scan();
+      setState(() {
+        result = qrResult;
+      });
+    } on PlatformException catch (ex) {
+      if (ex.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          result = "Camera permission was denied";
+        });
+      } else {
+        setState(() {
+          result = "Unknown Error $ex";
+        });
+      }
+    } on FormatException {
+      setState(() {
+        result = "You pressed the back button before scanning anything";
+      });
+    } catch (ex) {
+      setState(() {
+        result = "Unknown Error $ex";
+      });
+    }
+    setState(() {
+      recieverIDController.text = result;
+    });
+    
+  }
+  
+
+  
 
   var myController = TextEditingController(text: "");
   var recieverIDController = TextEditingController(text: "");
@@ -203,18 +239,11 @@ class _SellPageState extends State<SellPage> {
   void dispose() {
     myController.dispose();
     recieverIDController.dispose();
-    _scan();
+    _scanQR();
     super.dispose();
   }
 
-  Future _scan() async {
-    String barcode = await scanner.scan();
-    setState(() {
-      this.barcode = barcode;
-    });
-    recieverIDController.text = barcode;
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
@@ -282,7 +311,7 @@ class _SellPageState extends State<SellPage> {
                       //The row for three buttons for choosing the given commodities starts.
                       Container(
                         width: deviceWidth,
-                        height: deviceHeight * 0.07,
+                        //height: deviceHeight * 0.07,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8, bottom: 8),
                           child: Row(
@@ -426,7 +455,7 @@ class _SellPageState extends State<SellPage> {
 
                       //Container for Calculation boxes.
                       Padding(
-                        padding: const EdgeInsets.only(top: 30, bottom: 0),
+                        padding: const EdgeInsets.only(top: 30, bottom: 10),
                         child: Container(
                           width: deviceWidth * 0.88,
                           height: deviceHeight * 0.095,
@@ -484,7 +513,7 @@ class _SellPageState extends State<SellPage> {
                             child: TextFormField(
                               enabled: true,
                               controller: recieverIDController,
-
+                              
                               keyboardAppearance: Brightness.dark,
                               // enableInteractiveSelection: true,
                               style: TextStyle(fontFamily: fonts().fontRegular),
@@ -492,8 +521,11 @@ class _SellPageState extends State<SellPage> {
                                 suffixIcon: InkWell(
                                   onTap: () {
                                     print("Scanner Icon tapped");
-                                    _scan();
-
+                                    _scanQR();
+                                     setState(() {
+                                       
+                                       
+                                     });
                                     // scanner.scanPhoto();
                                   },
                                   child: new Icon(
@@ -514,6 +546,7 @@ class _SellPageState extends State<SellPage> {
                                     color: Colors.black54,
                                     fontFamily: fonts().fontRegular),
                               ),
+                              //onChanged: ,
                               // inputFormatters: [WhitelistingTextInputFormatter.],
                               // keyboardType:
                               //     TextInputType.numberWithOptions(decimal: false),
@@ -630,11 +663,11 @@ class _SellPageState extends State<SellPage> {
           Align(
             child: Container(
               width: deviceWidth,
-              height: 79,
+              height: 74,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 10, bottom: 15),
+                    left: 20, right: 20, top: 10, bottom: 7),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: RaisedButton(
