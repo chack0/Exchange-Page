@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:exchange/src/resources/fontsclass.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:barcode_scan/barcode_scan.dart';
 
 
@@ -65,9 +63,6 @@ String result = "0.0";
     });
     
   }
-  
-
-  
 
   var myController = TextEditingController(text: "");
   var recieverIDController = TextEditingController(text: "");
@@ -162,20 +157,6 @@ String result = "0.0";
     recieverIDController.text = "0.0";
   }
 
-  // void costCalculator() {
-  //   setState(() {
-  //     if (myController.text == "0" ||
-  //         myController.text == "" ||
-  //         myController.text == "0.0") {
-  //       qtyBoxValue = 0;
-  //       costText = "0.0";
-  //     } else {
-  //       cost = qtyBoxValue * currenrLivePrice;
-  //       costRoundOff = double.parse(cost.toStringAsFixed(2));
-  //       costText = costRoundOff.toString();
-  //     }
-  //   });
-  // }
 
   void _showDialog() {
     // flutter defined function
@@ -546,10 +527,6 @@ String result = "0.0";
                                     color: Colors.black54,
                                     fontFamily: fonts().fontRegular),
                               ),
-                              //onChanged: ,
-                              // inputFormatters: [WhitelistingTextInputFormatter.],
-                              // keyboardType:
-                              //     TextInputType.numberWithOptions(decimal: false),
                             ),
                           ),
                         ),
